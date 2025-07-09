@@ -1,0 +1,81 @@
+.mainimg {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+.divimgDesktop {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.girlimg {
+  object-fit: cover;
+  object-position: center top;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.textimg {
+
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 3rem;
+  font-weight: bold;
+  z-index: 99;
+  text-align: center;
+}
+
+.divimgMobile {
+  display: none;
+}
+@media (min-width: 1028px) and (max-width: 1820px) {
+  .textimg {
+    top: 13px;
+    transform: translateX(-50%); /* só centraliza horizontalmente */
+  }
+}
+@media (min-width: 600px) and (max-width: 1050px) {
+  .textimg {
+    top: 12px;
+    font-size: 42px ;
+  }
+}
+@media (max-width: 1024px) {
+  .textimg{font-size: 42px;
+top: 12%;
+}
+}
+@media (max-width: 580px) {
+  .mainimg {
+    height: 100vh;  
+  }
+.textimg{
+    font-size: 34px;
+    width: 100%;
+}
+
+  .divimgDesktop {
+    display: none;
+  }
+ 
+  
+
+  .divimgMobile {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    background-image: url('/Homemobile.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+}
