@@ -8,14 +8,58 @@ import { FaShare } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 
 import { db } from "@/services/firebaseConection"
-import { collection,addDoc } from "firebase/firestore"
+import { collection,addDoc, query, orderBy, where, onSnapshot } from "firebase/firestore"
 
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 
-export default function Treino(){
+interface User {
+    user: {
+        email:string
+    }
+}
+
+interface TrainerProps {
+    id:string;
+    treino:string;
+    public:boolean;
+    created:string;
+    user:string;
+    name:string;
+}
+
+export default function Treino({user}:User){
 const [input, setInput] = useState("")
 const [isPublic, setIsPublic] = useState(false)
+const [treinos,setTreinos] = useState<TrainerProps[]>([])
 
+useEffect(()=>{
+    async function LoadTreinos(){
+        const treinosRef = collection(db,"treinos")
+        const qry = query(treinosRef,orderBy("created","desc"),
+    where ("user", "==", user?.email)) /*Trago somente minhas tarefas*/ 
+
+    onSnapshot(qry,(snapshot)=>{
+        const traineList = [] as TrainerProps[] ;
+
+        snapshot.forEach((training)=>{
+            traineList.push ({
+                id: training.id,
+                treino: training.data().treino,
+                public: training.data().public,
+                created: training.data().created,
+                user: training.data().user,
+                name: training.data().name,
+            })
+        })
+        setTreinos(traineList)
+        console.log(traineList)
+    })
+
+
+    }
+LoadTreinos()
+
+},[user?.email])
 
 async function handleRegister(e:FormEvent){
 e.preventDefault()
@@ -28,6 +72,8 @@ if(input === "")return alert("Você precisa digitar o seu treino")
                 treino:input,
                 public:isPublic,
                 created: new Date().toLocaleDateString(),
+                user: user?.email,
+                name: user?.email.split("@"[0])
                 
             })
             setInput("")
@@ -79,9 +125,11 @@ if(input === "")return alert("Você precisa digitar o seu treino")
 
        <section className="border-t-2 border-white w-full max-w-[1024px] mb-6">
        <h2 className="flex justify-center items-center text-xl text-white font-extrabold py-4">Treinos Recentes</h2>
-        <div className=" flex flex-col gap-4 bg-white/10 p-4 rounded">
+        <div className={` flex flex-col gap-4 p-4 rounded ${treinos.length >0 ?  "bg-white/10" : ""}`}>
           
-          <article className="flex flex-col gap-2">
+         {treinos.map((item)=> (
+             <article key={item.id}
+             className="flex flex-col gap-2">
 
             <div className=" flex gap-2 items-center">
               <label className="text-white font-light text-[13px] bg-amber-700 p-1 rounded-sm">Público</label>  
@@ -95,6 +143,7 @@ if(input === "")return alert("Você precisa digitar o seu treino")
             </div>
 
           </article>
+         ))}
           
         </div>
         
@@ -120,7 +169,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
     
     return{
-        props:{}
+        props:{
+            user:{email:session?.user?.email,}
+        }
 
     }
     
