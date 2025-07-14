@@ -8,9 +8,12 @@ import { FaShare } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 
 import { db } from "@/services/firebaseConection"
-import { collection,addDoc, query, orderBy, where, onSnapshot } from "firebase/firestore"
+import { collection,addDoc, query, orderBy, where, onSnapshot,deleteDoc, doc } from "firebase/firestore"
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+
+import Link from "next/link"
+
 
 interface User {
     user: {
@@ -73,7 +76,7 @@ if(input === "")return alert("Você precisa digitar o seu treino")
                 public:isPublic,
                 created: new Date().toLocaleDateString(),
                 user: user?.email,
-                name: user?.email.split("@"[0])
+                name: user?.email.split("@")[0]
                 
             })
             setInput("")
@@ -89,10 +92,22 @@ if(input === "")return alert("Você precisa digitar o seu treino")
 
     }
 
+    async function handleDelete(id:string){
+       
+          try{
+            const docRef = doc(db, "treinos",id)
+              await deleteDoc(docRef)
+            alert("Treino excluído com sucesso!")
+        } catch(err){
+            console.log(err)
+        }
+            
+        
+    }
     return(
         <div 
         style={{ height: 'calc(100vh - 64px )'  }}
-        className="flex flex-col w-full bg-gradient-to-br from-orange-600 to-orange-800 items-center justify-center px-4 overflow-hidden">
+        className="flex flex-col w-full bg-gradient-to-br from-orange-600 to-orange-800 items-center justify-start py-4 px-4 overflow-auto">
             
             <Head>
                 <title>Treino</title>
@@ -123,27 +138,41 @@ if(input === "")return alert("Você precisa digitar o seu treino")
             </div> 
         </section>
 
-       <section className="border-t-2 border-white w-full max-w-[1024px] mb-6">
+       <section className="border-t-2 border-white w-full max-w-[1024px] gap-6">
        <h2 className="flex justify-center items-center text-xl text-white font-extrabold py-4">Treinos Recentes</h2>
-        <div className={` flex flex-col gap-4 p-4 rounded ${treinos.length >0 ?  "bg-white/10" : ""}`}>
+        <div className=" flex flex-col gap-6 p-4 rounded ">
           
          {treinos.map((item)=> (
              <article key={item.id}
-             className="flex flex-col gap-2">
+             className="flex flex-col gap-1 p-4 bg-white/10  rounded-md "
+             >
 
-            <div className=" flex gap-2 items-center">
+           {item.public && (
+             <div className=" flex gap-2 items-center">
               <label className="text-white font-light text-[13px] bg-amber-700 p-1 rounded-sm">Público</label>  
-            <FaShare size={19}
-            className=" text-white cursor-pointer "/>
+            <FaShare size={19} className=" text-white cursor-pointer "/>
             </div>
+           )}
 
+           {item.public ? (
+            /*COM PUBLICO */
             <div className=" w-full flex justify-between py-3">
-               <p className="break-all whitespace-pre-wrap leading-[150%] text-amber-200">mensagem</p>
-               <button className=" ml-2  items-center cursor-pointer"><FaTrash className="text-white"/> </button>
-            </div>
+            <Link href = {`/treino/${item.id}`}>
+                <p className="break-all whitespace-pre-wrap leading-[150%] text-amber-200">{item.treino}</p>
+            </Link>  <button onClick={()=> handleDelete(item.id)} className=" ml-2  items-center cursor-pointer"><FaTrash className="text-white"/> </button>
+            </div> )   : (
+              /* SEM PUBLICO */
+              <div className=" w-full flex justify-between py-3">
+                <p className="break-all whitespace-pre-wrap leading-[150%] text-amber-200">{item.treino}</p>
+              <button onClick={ ()=> handleDelete(item.id)}
+              className=" ml-2  items-center cursor-pointer"><FaTrash className="text-white"/> </button>
+               </div>
+           )}
 
-          </article>
+          </article> 
+          
          ))}
+         
           
         </div>
         
