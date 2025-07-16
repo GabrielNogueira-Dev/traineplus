@@ -186,7 +186,7 @@ if(input === "")return alert("Você precisa digitar o seu treino")
            {item.public ? (
             /*COM PUBLICO */
             <div className=" w-full flex justify-between py-3">
-            <Link href = {`/treino/${item.id}`}>
+            <Link href = {`/detail/${item.id}`}>
                 <p className="break-all whitespace-pre-wrap leading-[150%] text-amber-200">{item.treino}</p>
             </Link>  <button onClick={()=> handleDelete(item.id)} className=" ml-2  items-center cursor-pointer"><FaTrash className="text-white"/> </button>
             </div> )   : (
