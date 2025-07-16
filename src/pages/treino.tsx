@@ -101,9 +101,36 @@ if(input === "")return alert("Você precisa digitar o seu treino")
         } catch(err){
             console.log(err)
         }
-            
-        
+              
     }
+
+   async function handleShare(id:string){
+
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/detail/${id}`
+    const whatsappUrl = `whatsapp://send?text=${encodeURIComponent("Confira este treino no Traine Plus" + url)}` 
+    try{
+        await navigator.clipboard.writeText(url)
+
+        if(navigator.share){
+            await navigator.share({
+                title:"compartilhar treino",
+                text:"confira este treino no Traine Plus",
+                url,
+            })
+            alert("link copiado")
+        }else{
+            window.open(whatsappUrl, "_blank")
+                alert("Seu Link foi copiado! Abra seu Whatsapp para compartilhar.")
+            
+        }
+
+    }catch(err){
+        alert("Erro ao compartilhar! Apenas Abra o arquivo normamente e cole o link")
+        console.log(err)
+    }
+
+    }
+
     return(
         <div 
         style={{ height: 'calc(100vh - 64px )'  }}
@@ -150,7 +177,9 @@ if(input === "")return alert("Você precisa digitar o seu treino")
            {item.public && (
              <div className=" flex gap-2 items-center">
               <label className="text-white font-light text-[13px] bg-amber-700 p-1 rounded-sm">Público</label>  
-            <FaShare size={19} className=" text-white cursor-pointer "/>
+            <FaShare onClick={()=> handleShare(item.id)}
+            size={19} 
+            className=" text-white cursor-pointer "/>
             </div>
            )}
 
