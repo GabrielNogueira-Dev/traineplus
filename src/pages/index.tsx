@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import HomeImg from "../../public/Home.jpg";
-import styles from "@/styles/Home.module.css";
+import styles from "../styles/home.module.css";
 
 export default function Home() {
   return (
