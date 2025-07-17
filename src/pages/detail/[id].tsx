@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next"
 
+import { toast } from "react-toastify"
 import { FaTrash } from "react-icons/fa"
 
 import { db } from "@/services/firebaseConection"
@@ -64,6 +65,7 @@ export default function Detail({item, listComents}:itemProps){
                 setComents((oldcoments)=> [...oldcoments, data])
                 setInput("")
                 console.log(docRef)
+                toast.success("Comentário adicionado!")
 
     }catch(err){
         console.error("Error ao enviar o comentário", err)
@@ -77,7 +79,7 @@ try{
     await deleteDoc(docRef)
 
 const deleteComents = coments.filter( (doc) => doc.id !== id)
-
+toast.success("Comentário excluido!")
 setComents(deleteComents)
 }catch(err){
     console.error("Error ao deletar comentário" , err)
@@ -97,7 +99,7 @@ setComents(deleteComents)
         <h1 className="text-white text-3xl font-extrabold  mb-4 ">Ficha de Treino</h1>
 
       <article className="max-w-full w-full p-4 flex flex-col gap-1 bg-white/10 rounded-md whitespace-pre-wrap break-words  text-amber-200  ">
-  <p className="text-white">{item.treino}</p>
+  <p className=" font-bold text-white">{item.treino}</p>
 </article>
 
 

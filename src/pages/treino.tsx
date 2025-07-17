@@ -14,6 +14,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 
 import Link from "next/link"
 
+import { toast } from "react-toastify"
 
 interface User {
     user: {
@@ -81,15 +82,13 @@ if(input === "")return alert("Você precisa digitar o seu treino")
             })
             setInput("")
             setIsPublic(false)
+            toast.success("Treino adicionado com sucesso!")
         }
         catch(err){
             console.log(err)
             alert("Error ao registrar o treino" + err)
         }
         
-
-
-
     }
 
     async function handleDelete(id:string){
@@ -97,7 +96,7 @@ if(input === "")return alert("Você precisa digitar o seu treino")
           try{
             const docRef = doc(db, "treinos",id)
               await deleteDoc(docRef)
-            alert("Treino excluído com sucesso!")
+            toast.success("Treino excluído com sucesso!")
         } catch(err){
             console.log(err)
         }
@@ -117,15 +116,15 @@ if(input === "")return alert("Você precisa digitar o seu treino")
                 text:"confira este treino no Traine Plus",
                 url,
             })
-            alert("link copiado")
+            toast.info("link copiado")
         }else{
             window.open(whatsappUrl, "_blank")
-                alert("Seu Link foi copiado! Abra seu Whatsapp para compartilhar.")
+                toast.warn("Seu Link foi copiado! Abra seu Whatsapp para compartilhar.")
             
         }
 
     }catch(err){
-        alert("Erro ao compartilhar! Apenas Abra o arquivo normamente e cole o link")
+        toast.warning("Erro ao compartilhar! Apenas Abra o arquivo normamente e cole o link")
         console.log(err)
     }
 
