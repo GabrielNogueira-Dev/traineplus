@@ -53,6 +53,15 @@ export default function Detail({item, listComents}:itemProps){
                 name: session?.user.name,
                 taskId: item?.taskId
              })
+
+             const data = {
+                 coment: input,
+                 id: docRef.id,
+                 user: session?.user?.email,
+                 name: session?.user?.name,
+                taskId: item?.taskId
+             }
+                setComents((oldcoments)=> [...oldcoments, data])
                 setInput("")
                 console.log(docRef)
 
@@ -122,12 +131,12 @@ setComents(deleteComents)
                 key={item.id}>
                     <div className="flex items-center justify-between">
                     <p className="capitalize text-white bg-[#4d4c4c] p-[4px] rounded-md">{item.name} 🥇</p>
-                    <button 
+                   {item.user === session?.user?.email && ( <button 
                      onClick={ () => handleDelete(item.id)}>
                         <FaTrash size={15}
                     className=" cursor-pointer text-white"
                         />
-                    </button >
+                    </button >)}
                   </div>
                     <p className=" text-white font-bold">{item.coment}</p>
                 </article>
