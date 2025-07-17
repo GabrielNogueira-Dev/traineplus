@@ -5,7 +5,7 @@ export default function Header() {
 const {data:session, status} = useSession();
 
   return (
-    <header className=" bg-orange-600 w-full h-16 flex justify-center items-center font-bold px-4">
+    <header className="sticky top-0 z-50  shadow-md bg-orange-600 w-full h-16 flex justify-center items-center font-bold px-4">
       <section className="max-w-[1024px] w-full flex justify-between items-center ">
         <div className="bg-orange-700 text-gray-800 flex items-center gap-2 rounded-md py-2 px-3 text-lg min-w-[104px]">
           <Link href="/" className="max-[410px]:text-sm flex gap-1 items-center">
