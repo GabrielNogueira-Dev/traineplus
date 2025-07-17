@@ -90,7 +90,7 @@ setComents(deleteComents)
     return(
 
   <div 
-   className=" w-full bg-gradient-to-br from-orange-600 to-orange-800 flex justify-center ">
+   className="min-h-[calc(100vh-64px)] w-full bg-gradient-to-br from-orange-600 to-orange-800 flex justify-center ">
       <Head>
         <title>Detalhes do treino</title>
       </Head>
