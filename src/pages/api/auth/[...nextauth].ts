@@ -13,7 +13,7 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET as string, 
+  secret: process.env.JWT_SECRET as string, 
 };
 
 export default NextAuth(authOptions);
