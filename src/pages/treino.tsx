@@ -68,7 +68,7 @@ LoadTreinos()
 async function handleRegister(e:FormEvent){
 e.preventDefault()
 
-if(input === "")return alert("Você precisa digitar o seu treino")
+if(input === "")return toast.warn("Você precisa digitar o seu treino")
     
 
         try{
